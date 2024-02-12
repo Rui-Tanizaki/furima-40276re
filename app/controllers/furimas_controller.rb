@@ -1,6 +1,7 @@
 class FurimasController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
 
+
   def index
     @items = Item.order(created_at: :desc)
   end
@@ -19,7 +20,39 @@ class FurimasController < ApplicationController
     end
   end
 
+  def edit
+    @item = Item.find(params[:id])
+
+  end
+
+  def update
+    @item = Item.find(params[:id])
+    if @item.update(item_params)
+      redirect_to furima_path(@item)
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def show
+    @item = Item.find(params[:id])
+  end
+
+  def destroy
+    @item = Item.find(params[:id])
+    if current_user != @item.user
+      redirect_to root_path
+    else
+      @item.destroy
+      redirect_to root_path
+    end
+  end
+
   private
+
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
   def item_params
     params.require(:item).permit(:image, :item_name, :item_info, :item_price, :item_category_id, :item_sales_status_id,
