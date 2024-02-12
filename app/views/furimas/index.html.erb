@@ -128,7 +128,6 @@
     </div>
     <ul class='item-lists'>
       <% if @items.present? %>
-        <ul class='item-lists'>
           <% @items.each do |item| %>
             <li class='list'>
               <%= link_to furima_path(item) do %>
@@ -153,7 +152,6 @@
               <% end %>
             </li>
           <% end %>
-        </ul>
         <% else %>
         <li class='list'>
           <%= link_to '#' do %>
