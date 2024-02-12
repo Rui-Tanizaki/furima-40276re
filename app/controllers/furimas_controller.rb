@@ -33,6 +33,7 @@ class FurimasController < ApplicationController
   end
 
   def show
+    @user_item = UserItem.find_by(item_id: @item.id)
   end
 
   def destroy
