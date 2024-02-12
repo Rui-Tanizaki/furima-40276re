@@ -2,22 +2,36 @@ class OrdersController < ApplicationController
   before_action :set_item,only:[:index]
 
   def index
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @item_order = ItemOrder.new
   end
 
   def create
     @item_order = ItemOrder.new(item_order_params)
     if @item_order.valid?
+      pay_item
       @item_order.save
       redirect_to root_path
     else
-      set_item
       Rails.logger.error(@item_order.errors.full_messages)
+      gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+      set_item
       render :index, status: :unprocessable_entity
     end
   end
 
   private
+
+  def pay_item
+    set_item
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+
+    charge = Payjp::Charge.create(
+      amount: @item.item_price,
+      card: @item_order.token,
+      currency: 'jpy'
+    )
+  end
 
   def set_item
     @item = Item.find(params[:furima_id])
