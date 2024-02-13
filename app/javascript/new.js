@@ -14,8 +14,8 @@ document.addEventListener('turbo:load', function () {
       return;
     }
 
-    const addTaxPrice = initialLoad ? '' : `¥${Math.floor(itemPrice * 0.1).toLocaleString()}`;
-    const profit = initialLoad ? '' : `¥${Math.floor(itemPrice * 0.9).toLocaleString()}`;
+    const addTaxPrice = initialLoad ? '' : `${Math.floor(itemPrice * 0.1).toLocaleString()}`;
+    const profit = initialLoad ? '' : `${(itemPrice - Math.floor(itemPrice * 0.1)).toLocaleString()}`;
 
     addTaxPriceElement.textContent = addTaxPrice;
     profitElement.textContent = profit;

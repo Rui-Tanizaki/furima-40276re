@@ -1,6 +1,7 @@
 class FurimasController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_item, only: [:update, :edit, :show, :destroy]
+  before_action :set_user_item, only: [:show, :edit]
 
   def index
     @items = Item.order(created_at: :desc)
@@ -21,6 +22,9 @@ class FurimasController < ApplicationController
   end
 
   def edit
+    if @user_item && @user_item.item.present?
+       redirect_to root_path
+    end
 
   end
 
@@ -33,7 +37,6 @@ class FurimasController < ApplicationController
   end
 
   def show
-    @user_item = UserItem.find_by(item_id: @item.id)
   end
 
   def destroy
@@ -46,6 +49,10 @@ class FurimasController < ApplicationController
   end
 
   private
+
+  def set_user_item
+    @user_item = UserItem.find_by(item_id: @item.id)
+  end
 
   def set_item
     @item = Item.find(params[:id])
