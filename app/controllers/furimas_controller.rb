@@ -23,7 +23,9 @@ class FurimasController < ApplicationController
 
   def edit
     if @user_item && @user_item.item.present?
-       redirect_to root_path
+      redirect_to root_path
+    elsif current_user != @item.user
+      redirect_to root_path
     end
 
   end
